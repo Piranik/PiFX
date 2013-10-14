@@ -15,8 +15,6 @@ var frameRate = 500;
 
 setInterval(randomLights, frameRate);
 
-//---------------------------------------------------------
-//Functions
 function randomLights(){
 
 	//pick a random color for each light

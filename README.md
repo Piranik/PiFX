@@ -20,7 +20,7 @@ var pixels 	= new RPixel.PixelBuffer(device, numPixels); //instantiates the Pixe
 
 Once you include that stuff in your file you are now ready to use the manipulate the LED strip using the `pixels` methods:
 
-```javacsript
+```javascript
 var frameRate = 500;
 
 setInterval(randomLights, frameRate);
@@ -48,8 +48,19 @@ The `PixelBuffer` object can be thought of as the light itself, as it holds the 
 
 The `Pixel` class is incredibly straightforward as it holds methods for getting and setting the r, g, b colors as well as HSL of individual LEDs on the LED strip.
 
+###Pixel
+####Important Properties
+- `Pixel.color` : The pixel's color object. It contains `r`, `g`, `b` properties that hold values 1-255.
+
+####Important Methods
+
+-`Pixel(r, g, b)` is the constructor.
+- `Pixel.getRGB()` returns the pixel's color object.
+- `Pixel.getHSL()` returns the pixel's color object transformed to hsl.
+
 ###Pixel Buffer
 ####Important Properties
+
 - `PixelBuffer.length`: The number of LEDs on the LED strip.
 
 ####Important Methods
@@ -67,4 +78,43 @@ The `Pixel` class is incredibly straightforward as it holds methods for getting 
 - `PixelBuffer.get` returns the current buffer.
 
 Remember, after any changes are made using the above PixelBuffer methods you must use `PixelBuffer.update()` to send those changes to the LED strip.
+
+##Examples
+
+Example files can be found in this repo's [example directory](example).
+
+Below is a simple example that randomly changes each LED's color on an 11 LED strip every .5 seconds. 
+
+```javascript
+
+var spi = require('spi'),
+RPixel = require('raspberrypixels');
+var Pixel = RPixel.Pixel;
+
+var numPixels = 11;
+
+var device	= new spi.Spi('/dev/spidev0.0', function(){});
+var pixels 	= new RPixel.PixelBuffer(device, 11);
+
+//---------------------------------------------------------
+//Do stuff in here
+
+var frameRate = 500;
+
+setInterval(randomLights, frameRate);
+
+function randomLights(){
+
+	//pick a random color for each light
+	for(var i = 0; i < pixels.length; i++){
+		var r = Math.floor(Math.random()*255);
+		var g = Math.floor(Math.random()*255);
+		var b = Math.floor(Math.random()*255);
+		pixels.setRGB(i, r, g, b);
+	}
+
+	//don't forget to send the pixels to the light
+	pixels.update();
+}
+```
 
