@@ -1,5 +1,6 @@
 var spi = require('spi'),
-RPixel = require('raspberrypixels');
+RPixel = require('raspberrypixels'),
+Throb = require('./ThrobClass');
 var Pixel = RPixel.Pixel;
 
 var numPixels = 11;
@@ -40,16 +41,6 @@ var behavior =
 	}
 }
 
-var color = {
-	r: 255,
-	g: 255,
-	b: 255
-}
+var throb = new Throb(behavior.active);
+throb.start(pixels);
 
-var pixel1 = new Pixel(color);
-var pixel2 = new Pixel(color.r, color.g, color.b);
-
-console.log(pixel1);
-console.log(pixel2);
-
-//do the active animation and then go to dormant
