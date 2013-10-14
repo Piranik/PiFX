@@ -11,28 +11,35 @@ function Throb(animationObject){
 	this.threshold = 5;
 	this.numbFrames = this.time/this.frameRate;
 	this.isFinished = false;
+
+	console.log("The number of frames is " + this.numbFrames);
 }
 
 Throb.prototype.start = function(pixelBuffer){
 	
 	this.currentFrame = 0;
-	this.currentColor = this.startColor;
+	this.currentColor = this.beginColor;
 
 	//the values each color should increment by so that they each arrive
 	//at the target color at the same time
-	this.rIncrementVal = (Math.abs(this.startColor.r) - Math.abs(this.endColor.r)) / this.numbFrames;
-	this.gIncrementVal = (Math.abs(this.startColor.g) - Math.abs(this.endColor.g)) / this.numbFrames;
-	this.bIncrementVal = (Math.abs(this.startColor.b) - Math.abs(this.endColor.b)) / this.numbFrames;
+	this.rIncrementVal = (Math.abs(this.beginColor.r) - Math.abs(this.endColor.r)) / this.numbFrames;
+	this.gIncrementVal = (Math.abs(this.beginColor.g) - Math.abs(this.endColor.g)) / this.numbFrames;
+	this.bIncrementVal = (Math.abs(this.beginColor.b) - Math.abs(this.endColor.b)) / this.numbFrames;
 
+	console.log("r increment:" + this.rIncrementVal);
+	console.log("g increment:" + this.gIncrementVal);
+	console.log("b increment:" + this.bIncrementVal);
+
+	var that = this;
 	this.intervalID = setInterval(function(){
-		if(this.currentFrame < this.numbFrames){
-			this._tick(pixelBuffer);
-			this.currentFrame++;
+		if(that.currentFrame < that.numbFrames){
+			that._tick(pixelBuffer);
+			that.currentFrame++;
 		}
 		else{
 			//stop the interval
-			clearInterval(this.intervalID);
-			this.isFinished = true;
+			clearInterval(that.intervalID);
+			that.isFinished = true;
 		}	
 	}, this.frameRate);
 }
@@ -46,7 +53,13 @@ Throb.prototype._tick = function(pixelBuffer){
 	var pixels = pixelBuffer;
 	var color = this._increment(this.currentColor);
 	pixels.fillRGB(color.r, color.g, color.b);
-	this.currentColor = color;
+
+	console.log(color); //LOOK HERE
+
+	//currentColor becomes the new color
+	this.currentColor = color; 
+
+	//write to the lights
 	pixels.update();
 }
 
@@ -69,12 +82,13 @@ Throb.prototype._getIncrementedColor = function(incrementVal, colorVal, targetCo
 	else if(colorVal > targetColorVal &&
 			!this._targetReached(this.threshold, colorVal, targetColorVal)){
 	   	 colorVal -= incrementVal;
-	} 
+	}
+
 	return colorVal;
 }
 
 Throb.prototype._targetReached = function(threshold, currentColor, targetColor){
-	return (Math.abs(currentColor.r) - (targetColor.r) < threshold) ? true : false;
+	return (Math.abs(currentColor) - (targetColor) < threshold) ? true : false;
 }
 
 module.exports = Throb;
