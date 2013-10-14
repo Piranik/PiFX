@@ -8,7 +8,7 @@ function Throb(animationObject){
 	this.fluid = animationObject.fluid;
 
 	this.frameRate = 10;
-	this.threshold = 5;
+	this.threshold = 1;
 	this.numbFrames = this.time/this.frameRate;
 	this.isFinished = false;
 
@@ -22,9 +22,9 @@ Throb.prototype.start = function(pixelBuffer){
 
 	//the values each color should increment by so that they each arrive
 	//at the target color at the same time
-	this.rIncrementVal = (Math.abs(this.beginColor.r) - Math.abs(this.endColor.r)) / this.numbFrames;
-	this.gIncrementVal = (Math.abs(this.beginColor.g) - Math.abs(this.endColor.g)) / this.numbFrames;
-	this.bIncrementVal = (Math.abs(this.beginColor.b) - Math.abs(this.endColor.b)) / this.numbFrames;
+	this.rIncrementVal = Math.abs(Math.abs(this.beginColor.r - this.endColor.r) / this.numbFrames);
+	this.gIncrementVal = Math.abs(Math.abs(this.beginColor.g - this.endColor.g) / this.numbFrames);
+	this.bIncrementVal = Math.abs(Math.abs(this.beginColor.b - this.endColor.b) / this.numbFrames);
 
 	console.log("r increment:" + this.rIncrementVal);
 	console.log("g increment:" + this.gIncrementVal);
@@ -42,6 +42,12 @@ Throb.prototype.start = function(pixelBuffer){
 			that.isFinished = true;
 		}	
 	}, this.frameRate);
+}
+
+Throb.prototype.onFinished(){
+	while(!this.isFinished()){
+		
+	}
 }
 
 Throb.prototype.isFinished = function(){
@@ -76,19 +82,21 @@ Throb.prototype._getIncrementedColor = function(incrementVal, colorVal, targetCo
 	if(colorVal < targetColorVal &&
 	   !this._targetReached(this.threshold, colorVal, targetColorVal)){
 		 colorVal += incrementVal; 
+		// console.log("the color value of b is less than the targetColorVal");
 		 
 	} 
 	//color value is greater than target color value
 	else if(colorVal > targetColorVal &&
 			!this._targetReached(this.threshold, colorVal, targetColorVal)){
+		 // console.log("the color value of b is less than the targetColorVal");
 	   	 colorVal -= incrementVal;
 	}
-
+	// console.log("It was neither");
 	return colorVal;
 }
 
 Throb.prototype._targetReached = function(threshold, currentColor, targetColor){
-	return (Math.abs(currentColor) - (targetColor) < threshold) ? true : false;
+	return (Math.abs(currentColor - targetColor) < threshold) ? true : false;
 }
 
 module.exports = Throb;

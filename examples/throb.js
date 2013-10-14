@@ -27,8 +27,8 @@ var behavior =
 		"begin":{
 			"color":{
 				"r": 255,
-				"g": 0,
-				"b": 0
+				"g": 200,
+				"b": 5
 			}
 		},
 		"end": {
@@ -43,4 +43,8 @@ var behavior =
 
 var throb = new Throb(behavior.active);
 throb.start(pixels);
+
+// throb.onFinished(function(){
+
+// };
 
