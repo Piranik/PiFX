@@ -27,24 +27,21 @@ var behavior =
 		"begin":{
 			"color":{
 				"r": 255,
-				"g": 200,
-				"b": 5
+				"g": 0,
+				"b": 0
 			}
 		},
 		"end": {
 			"color":{
 				"r": 0,
 				"g": 0,
-				"b": 0
+				"b": 255
 			}
 		}
 	}
 }
 
 var throb = new Throb(behavior.active);
-throb.start(pixels);
-
-// throb.onFinished(function(){
-
-// };
-
+throb.animate(pixels, function(){
+	console.log("I finished the throb");
+});

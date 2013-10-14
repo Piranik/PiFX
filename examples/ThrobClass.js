@@ -6,6 +6,7 @@ function Throb(animationObject){
 	this.beginColor = animationObject.begin.color;
 	this.endColor = animationObject.end.color;
 	this.fluid = animationObject.fluid;
+	this.shouldRepeat = (this.fluid) ? true : false;
 
 	this.frameRate = 10;
 	this.threshold = 1;
@@ -15,7 +16,7 @@ function Throb(animationObject){
 	console.log("The number of frames is " + this.numbFrames);
 }
 
-Throb.prototype.start = function(pixelBuffer){
+Throb.prototype.animate = function(pixelBuffer, onFinished){
 	
 	this.currentFrame = 0;
 	this.currentColor = this.beginColor;
@@ -39,15 +40,23 @@ Throb.prototype.start = function(pixelBuffer){
 		else{
 			//stop the interval
 			clearInterval(that.intervalID);
-			that.isFinished = true;
+			if(that.fluid &&
+			   that.shouldRepeat){
+				
+				//swap the begin and end colors
+				var temp = that.beginColor;
+				that.beginColor = that.endColor;
+				that.endColor = temp;
+
+				that.animate(pixelBuffer, onFinished);
+				that.shouldRepeat = false;
+				
+			}else{
+				that.isFinished = true;
+				onFinished();
+			}
 		}	
 	}, this.frameRate);
-}
-
-Throb.prototype.onFinished(){
-	while(!this.isFinished()){
-		
-	}
 }
 
 Throb.prototype.isFinished = function(){
