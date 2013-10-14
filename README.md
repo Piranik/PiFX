@@ -54,7 +54,7 @@ The `Pixel` class is incredibly straightforward as it holds methods for getting 
 
 ####Important Methods
 
--`Pixel(r, g, b)` is the constructor.
+- `Pixel(r, g, b)` or `Pixel(color)` is the constructor.
 - `Pixel.getRGB()` returns the pixel's color object.
 - `Pixel.getHSL()` returns the pixel's color object transformed to hsl.
 
